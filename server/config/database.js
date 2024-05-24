@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-require("dotenv").config(); //all data in envirement(.env) file, that load by dotenv package
+require("dotenv").config();
 
 exports.connect = () => {
   mongoose.connect(process.env.MONGODB_URL, {
