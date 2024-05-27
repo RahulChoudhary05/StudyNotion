@@ -226,4 +226,71 @@ exports.login = async (req, res) => {
     });
   }
 };
+
 //changePassword
+exports.changePassword = async (req, res) => {
+  try {
+    // Get data from request body
+    const { oldPassword, newPassword, confirmNewPassword } = req.body;
+
+    // Validate the input
+    if (!oldPassword || !newPassword || !confirmNewPassword) {
+      return res.status(403).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    // Check if the new password and confirm new password match
+    if (newPassword !== confirmNewPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "New password and confirm new password do not match",
+      });
+    }
+
+    // Get the user ID from the token (assuming authentication middleware sets req.user)
+    const userId = req.user.id;
+
+    // Find the user in the database
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Check if the old password matches the current password
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Old password is incorrect",
+      });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the password in the database
+    user.password = hashedPassword;
+    await user.save();
+
+    // Send mail - Password updated (using the mailSender utility)
+    await mailSender(user.email, "Password Updated", "<p>Your password has been updated successfully.</p>");
+
+    // Return response
+    return res.status(200).json({
+      success: true,
+      message: "Password updated successfully",
+    });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Password update failed, please try again",
+    });
+  }
+};
