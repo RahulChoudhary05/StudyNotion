@@ -95,4 +95,3 @@ exports.isAdmin = (req, res, next) => {
     });
   }
 };
-//isInstructor
