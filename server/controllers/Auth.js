@@ -270,7 +270,7 @@ exports.changePassword = async (req, res) => {
       });
     }
 
-    // Hash the new password
+    // Hash the New Password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     // Update the password in the database
