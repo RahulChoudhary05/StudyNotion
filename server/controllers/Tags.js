@@ -5,7 +5,6 @@ exports.createTag = async (req, res) => {
   try {
     //data fetch
     const { name, description } = req.body;
-
     //validation
     if (!name || description) {
       return res.status(400).json({
@@ -13,7 +12,6 @@ exports.createTag = async (req, res) => {
         message: "All fields required",
       });
     }
-
     //create entry in db
     const tagDetails = await Tag.create({
       name: name,
