@@ -32,6 +32,7 @@ exports.createCourse = async (req, res) => {
     const userID = req.user.id;
     const instructorDetails = await User.findById(userID);
     console.log("Instructor Details :", instructorDetails);
+    // tooo: verify that userID and instructorDetails._id are same or different?
 
     if (!instructorDetails) {
       return res.status(404).json({
@@ -105,4 +106,36 @@ exports.createCourse = async (req, res) => {
     });
   }
 };
+
 //get all course handle function
+exports.showAllCourses = async (req, res) => {
+  try {
+    const allCourses = await Course.find(
+      {},
+      {
+        courseName: true,
+        price: true,
+        thumbnail: true,
+        instructor: true,
+        ratingAndReviews: true,
+        studentsEnrolled: true,
+      }
+    )
+      .populate("instructor")
+      .exec();
+
+    //return response
+    return res.status(200).json({
+      success: true,
+      message: "Data fro all courses fetched Successfully",
+      data: allCourses,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch all courses",
+      error: error.message,
+    });
+  }
+};
