@@ -26,7 +26,7 @@ exports.createSection = async (req, res) => {
         },
       },
       { new: true }
-    );
+    ).populate("courseContent");
     //HW: use populate to replace sections/subsection both in the updatedCourseDatails
     //return response
     return res.status(200).json({
