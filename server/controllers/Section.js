@@ -1,6 +1,7 @@
 const Section = require("../models/Section");
 const Course = require("../models/Course");
 
+//create section
 exports.createSection = async (req, res) => {
   try {
     //data fetch
@@ -43,3 +44,63 @@ exports.createSection = async (req, res) => {
     });
   }
 };
+
+//update the section
+exports.updateSection = async (req, res) => {
+  try {
+    //data input
+    const { sectionName, sectionId } = req.body;
+
+    //data validation
+    if (!sectionName || !sectionId) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing Properties",
+      });
+    }
+
+    //update data
+    const section = await Section.findByIdAndUpdate(
+      sectionId,
+      { sectionName },
+      { new: true }
+    );
+
+    //return response
+    return res.status(200).json({
+      success: true,
+      message: "Section updated Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Unable to Update sections, please try again",
+      error: error.message,
+    });
+  }
+};
+
+// delete section
+exports.deleteSection = async (req, res) => {
+    try {
+      //data input
+      const {sectionId } = req.params
+  
+      //delete data
+      await Section.findByIdAndDelete(sectionId);
+  
+      //return response
+      return res.status(200).json({
+        success: true,
+        message: "Section delete Successfully",
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        success: false,
+        message: "Unable to Update sections, please try again",
+        error: error.message,
+      });
+    }
+  };
