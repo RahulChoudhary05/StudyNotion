@@ -134,3 +134,13 @@ exports.deleteSubSection = async (req, res) => {
     });
   }
 };
+
+//verify signature of Razorpay and Server
+exports.verifySignature = async (req,res)=>{
+  //server secret
+  const webhookSecret = "12345678";
+  
+  //Razorpay secret
+  const signature = req.header("x-razorpay-signature");
+  //match both secret
+}

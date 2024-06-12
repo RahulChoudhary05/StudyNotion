@@ -47,7 +47,7 @@ exports.capturePayment = async (req, res) => {
       error: error.message,
     });
   }
-  
+
   //order create
   const amount = course.price;
   const currency = "INR";
@@ -82,5 +82,23 @@ exports.capturePayment = async (req, res) => {
       success: false,
       message: "Could not initiate order",
     });
+  }
+};
+
+//verify signature of Razorpay and Server
+exports.verifySignature = async (req, res) => {
+  //server secret
+  const webhookSecret = "12345678";
+
+  //Razorpay secret
+  const signature = req.header("x-razorpay-signature");
+
+  //match both secret
+  const shasum = crypto.createHmac("sha256", webhookSecret);
+  shasum.update(JSON.stringify(req.body));
+  const digest = shasum.digest("hex");
+
+  if (signature == digest) {
+    console.log("Payment is Authorised");
   }
 };
