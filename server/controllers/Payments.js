@@ -100,5 +100,57 @@ exports.verifySignature = async (req, res) => {
 
   if (signature == digest) {
     console.log("Payment is Authorised");
+    const { courseID, userId } = req.body.payload.payment.entity.notes;
+    try {
+      //find the course and enroll the student in it
+      const enrolledCourse = await Course.findByIdAndUpdate(
+        { _id: courseID },
+        { $push: { studentsEnrolled: userId } },
+        { new: true }
+      );
+
+      if (!enrolledCourse) {
+        console.log(error);
+        return res.status(500).json({
+          success: false,
+          message: "Course not found",
+        });
+      }
+      console.log(enrolledCourse);
+
+      //find the student and add course list enrolled courses
+      const enrolledStudent = await User.findByIdAndUpdate(
+        { _id: userId },
+        { $push: { courses: courseID } },
+        { new: true }
+      );
+      console.log(enrolledStudent);
+
+      //mail sender confermation, enrolled in course
+      const emailResponse = await mailSender(
+        enrolledStudent.email,
+        "Congratulation for StudyNotion",
+        "Congratulation, You are enrolled into new StudyNotion Course"
+      );
+
+      console.log(emailResponse);
+
+      //resopnse
+      return res.status(200).json({
+        success: true,
+        message: "Signature vreified, courese add and mail send seccessflly",
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  } else {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid request",
+    });
   }
 };
