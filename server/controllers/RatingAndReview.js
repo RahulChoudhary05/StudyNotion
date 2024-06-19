@@ -2,41 +2,40 @@ const RatingAndReview = require("../models/RatingAndReviews");
 const Course = require("../models/Course");
 const mongoose = require("mongoose");
 
-//create rating
+// Create rating and review
 exports.createRating = async (req, res) => {
   try {
-    //get user id
+    // Get user id
     const userId = req.user.id;
 
-    //fetchdata from req body
+    // Fetch data from req body
     const { rating, review, courseId } = req.body;
 
-    //check if user is enrolled or not
+    // Check if the user is enrolled in the course
     const courseDetails = await Course.findOne({
       _id: courseId,
-      studentsEnrolled: { $eleMatch: { $eq: userId } },
+      studentsEnrolled: { $elemMatch: { $eq: userId } },
     });
     if (!courseDetails) {
       return res.status(404).json({
         success: false,
-        message: "Student is not enrolled this course",
+        message: "Student is not enrolled in this course",
       });
     }
 
-    //check user already reviewed the course
+    // Check if the user has already reviewed the course
     const alreadyReviewed = await RatingAndReview.findOne({
       user: userId,
       course: courseId,
     });
-    if (!alreadyReviewed) {
+    if (alreadyReviewed) {
       return res.status(403).json({
         success: false,
-        message:
-          "Course is already reviewed by the user, only one time review/rating",
+        message: "The course has already been reviewed by the user. Only one review/rating is allowed",
       });
     }
 
-    //create rating and review
+    // Create rating and review
     const ratingReview = await RatingAndReview.create({
       rating,
       review,
@@ -44,33 +43,30 @@ exports.createRating = async (req, res) => {
       user: userId,
     });
 
-    //update course with this reading review
-    const updatedCourseDetails = await Course.findByIdAndUpdate(
+    // Update the course with this rating and review
+    await Course.findByIdAndUpdate(
       { _id: courseId },
-      {
-        $push: { ratingAndReviews: ratingReview._id },
-      },
+      { $push: { ratingAndReviews: ratingReview._id } },
       { new: true }
     );
-    console.log(updatedCourseDetails);
 
-    //return response
+    // Return response
     return res.status(200).json({
       success: true,
-      message: "Raing And Review created successfully",
+      message: "Rating and Review created successfully",
       ratingReview,
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "Rating and Review not created",
+      message: "Failed to create Rating and Review",
       error: error.message,
     });
   }
 };
 
-//getAverageRating
+// Get average rating for a course
 exports.getAverageRating = async (req, res) => {
   try {
     // Get course id
@@ -86,28 +82,19 @@ exports.getAverageRating = async (req, res) => {
       },
     ]);
 
-    //return rating
-    if (result.length) {
+    // Return average rating
+    if (result.length > 0) {
       return res.status(200).json({
         success: true,
-        averageRating: result[0].alreadyReviewed,
+        averageRating: result[0].averageRating,
       });
     }
 
-    //if no rating review exist
+    // No ratings exist for the course
     return res.status(200).json({
       success: true,
-      message: "Average rating is 0 no rating given till now",
+      message: "Average rating is 0 as no ratings have been given for this course",
       averageRating: 0,
-    });
-
-    //   // Check if result is not empty
-    //   const averageRating = result.length > 0 ? result[0].averageRating : 0;
-
-    // Return the average rating
-    return res.status(200).json({
-      success: true,
-      averageRating: averageRating,
     });
   } catch (error) {
     console.log(error);
@@ -119,20 +106,20 @@ exports.getAverageRating = async (req, res) => {
   }
 };
 
-//getAllRatingAndReviews
+// Get all ratings and reviews
 exports.getAllRating = async (req, res) => {
   try {
-    //fetch all raring and review
+    // Fetch all ratings and reviews
     const allReviews = await RatingAndReview.find({})
       .sort({ rating: "descending" })
       .populate({ path: "user", select: "firstName lastName email image" })
       .populate({ path: "course", select: "courseName" })
       .exec();
 
-    //return response
+    // Return response
     return res.status(200).json({
       success: true,
-      message: "All review fetch successfully",
+      message: "All reviews fetched successfully",
       data: allReviews,
     });
   } catch (error) {
