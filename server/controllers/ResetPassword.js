@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const mailSender = require("../utils/mailSender");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
 //resetPasswordToken (in mail link)
 exports.resetPasswordToken = async (req, res) => {
@@ -13,12 +14,12 @@ exports.resetPasswordToken = async (req, res) => {
     if (!user) {
       return res.json({
         success: false,
-        message: "YOur Email is not registered with us",
+        message: `This Email: ${email} is not Registered With Us Enter a Valid Email `,
       });
     }
 
     //generate token
-    const token = crypto.randomUUID();
+    const token = crypto.randomBytes(20).toString("hex");
 
     //update user by adding token and expiration time
     const updatedDetails = await User.findOneAndUpdate(
@@ -35,10 +36,10 @@ exports.resetPasswordToken = async (req, res) => {
 
     //send mail containing url
     await mailSender(
-      email,
-      "Password Reser Link | StudyNotion",
-      `<h1>Hello ${req.body.firstName}</h1> <p>Password Reset Link : ${url}</p> <h3>Time limit of reset password link </h3>`
-    );
+			email,
+			"Password Reset",
+			`Your Link for email verification is ${url}. Please click this url to reset your password.`
+		);
 
     // return response
     return res.json({
@@ -70,7 +71,7 @@ exports.resetPassword = async (req, res) => {
     }
 
     //get userdetails fron db using token
-    const userDetails = await user.findOne({ token: token });
+    const userDetails = await User.findOne({ token: token });
 
     //if no entry - invalid token
     if (!userDetails) {
@@ -92,7 +93,7 @@ exports.resetPassword = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     //password update in db
-    await user.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { token: token },
       { password: hashedPassword },
       { new: true }

@@ -1,46 +1,77 @@
 const Profile = require("../models/Profile");
 const User = require("../models/User");
+const { uploadImageToCloudinary } = require("../utils/imageUploader");
 
 //update profile, because dummy profile already create in middleware(null)
 exports.updateProfile = async (req, res) => {
   try {
-    //get data
-    const { dateofBirth = "", about = "", gender, contactNumber } = req.body;
-
-    //get userId
+    const {
+      firstName,
+      lastName,
+      dateofBirth = "",
+      about = "",
+      contactNumber = "",
+      gender = "",
+    } = req.body;
     const id = req.user.id;
 
-    //validation
-    if (!contactNumber || !gender) {
-      return res.status(400).json({
+    // Find the user by id and populate additionalDetail
+    const userDetails = await User.findById(id)
+      .populate("additionalDetail")
+      .exec();
+    if (!userDetails) {
+      return res.status(404).json({
         success: false,
-        message: "All field's are required",
+        message: "User not found",
       });
     }
 
-    //find profile(already dummy created)
-    const userDetails = await User.findById(id);
-    const profileId = userDetails.additionalDetail;
-    const profileDetails = await Profile.findById(profileId);
+    const profileId = userDetails.additionalDetail._id;
+    console.log("Profile ID:", profileId); // Log the profileId
 
-    //update profile
-    profileDetails.dateofBirth = dateofBirth;
-    profileDetails.about = about;
-    profileDetails.gender = gender;
-    profileDetails, (contactNumber = contactNumber);
-    await profileDetails.save();
+    const profile = await Profile.findById(profileId);
 
-    //return response
-    return res.status(200).json({
+    // Check if profile exists
+    if (!profile) {
+      console.log("Profile not found");
+      return res.status(404).json({
+        success: false,
+        message: "Profile not found",
+      });
+    }
+
+    // Update the user's firstName and lastName only if they are provided
+    if (firstName) {
+      userDetails.firstName = firstName;
+    }
+    if (lastName) {
+      userDetails.lastName = lastName;
+    }
+
+    await userDetails.save();
+
+    // Update the profile fields
+    profile.dateofBirth = dateofBirth;
+    profile.about = about;
+    profile.contactNumber = contactNumber;
+    profile.gender = gender;
+
+    await profile.save();
+
+    // Find the updated user details
+    const updatedUserDetails = await User.findById(id)
+      .populate("additionalDetail")
+      .exec();
+
+    return res.json({
       success: true,
-      message: "Profile updated Successfully",
-      profileDetails,
+      message: "Profile updated successfully",
+      updatedUserDetails,
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "Unable to update Profile, please try again",
       error: error.message,
     });
   }
@@ -99,6 +130,7 @@ exports.getAllUserDetails = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "User data fetched Successfully",
+      userDetails,
     });
   } catch (error) {
     console.log(error);
@@ -106,6 +138,36 @@ exports.getAllUserDetails = async (req, res) => {
       success: false,
       message: "User all details can't fetch Successfully",
       error: error.message,
+    });
+  }
+};
+
+//update pic
+exports.updateDisplayPicture = async (req, res) => {
+  try {
+    const displayPicture = req.files.displayPicture;
+    const userId = req.user.id;
+    const image = await uploadImageToCloudinary(
+      displayPicture,
+      process.env.FOLDER_NAME,
+      1000,
+      1000
+    );
+    console.log(image);
+    const updatedProfile = await User.findByIdAndUpdate(
+      { _id: userId },
+      { image: image.secure_url },
+      { new: true }
+    );
+    res.send({
+      success: true,
+      message: `Image Updated successfully`,
+      data: updatedProfile,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };

@@ -4,30 +4,24 @@ const Tag = require("../models/Category");
 //create tag handler function
 exports.createCategory = async (req, res) => {
   try {
-    //data fetch
     const { name, description } = req.body;
-    //validation
-    if (!name || description) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields required",
-      });
+    if (!name) {
+      return res
+        .status(400)
+        .json({ success: false, message: "All fields are required" });
     }
-    //create entry in db
-    const tagDetails = await Tag.create({
+    const CategorysDetails = await Category.create({
       name: name,
       description: description,
     });
-    console.log(tagDetails);
-
+    console.log(CategorysDetails);
     return res.status(200).json({
       success: true,
-      message: "Tags created Successfully",
+      message: "Categorys Created Successfully",
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
-      success: false,
+      success: true,
       message: error.message,
     });
   }
@@ -36,12 +30,12 @@ exports.createCategory = async (req, res) => {
 // get all tags handler function
 exports.showAllCategories = async (req, res) => {
   try {
-    const allTags = await Tag.find({}, { name: true, description: true });
+    const allCategory = await Category.find({}, { name: true, description: true });
 
     return res.status(200).json({
       success: true,
-      message: "All Tags return Successfully",
-      allTags,
+      message: "All Category return Successfully",
+      allCategory,
     });
   } catch (error) {
     console.log(error);

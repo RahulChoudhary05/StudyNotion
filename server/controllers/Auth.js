@@ -88,9 +88,9 @@ exports.signup = async (req, res) => {
       contactNumber,
       password: hashedPassword,
       accountType: accountType,
-			approved: approved,
+      approved: approved,
       additionalDetail: profileDetails._id,
-      image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
+      image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName}${lastName}`,
     });
 
     return res.status(200).json({
@@ -123,7 +123,7 @@ exports.login = async (req, res) => {
     }
 
     // Find user with provided email
-    const user = await User.findOne({ email }).populate("additionalDetails");
+    const user = await User.findOne({ email }).populate({ path: 'additionalDetails', options: { strictPopulate: false } });
 
     // If user not found with provided email
     if (!user) {
