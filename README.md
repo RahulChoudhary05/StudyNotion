@@ -70,35 +70,3 @@ Architecture Diagram
 
 API Design
 StudyNotion's API follows REST principles, using JSON for data exchange and standard HTTP methods (GET, POST, PUT, DELETE). Refer to the API Documentation for detailed endpoints.
-
-Installation
-Clone the repository:
-sh
-Copy code
-git clone https://github.com/username/repo.git
-Navigate to the project directory:
-sh
-Copy code
-cd StudyNotion
-Install dependencies:
-sh
-Copy code
-npm install
-Configuration
-Set up a MongoDB database and get the connection URL.
-Create a .env file in the root directory with the following variables:
-sh
-Copy code
-MONGODB_URI=<your-mongodb-connection-url>
-JWT_SECRET=<your-jwt-secret-key>
-Usage
-Start the server:
-sh
-Copy code
-npm start
-Open a new terminal, navigate to the client directory, and start the React development server:
-sh
-Copy code
-cd client
-npm start
-Access the application at http://localhost:3000.
