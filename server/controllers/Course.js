@@ -20,29 +20,24 @@ exports.createCourse = async (req, res) => {
       courseDescription,
       whatYouWillLearn,
       price,
-      tag: _tag,
+      tag,
       category,
       status,
-      instructions: _instructions,
+      instructions,
     } = req.body;
 
     // thumbnail image from request files
     const thumbnail = req.files.thumbnailImage;
 
-    // Parse the tag and instructions which are stringified arrays
-    const tag = JSON.parse(_tag);
-    const instructions = JSON.parse(_instructions);
-
-    // validation
+    // validation(Check if any of the required fields are missing)
     if (
       !courseName ||
       !courseDescription ||
       !whatYouWillLearn ||
       !price ||
-      !tag.length ||
+      !tag ||
       !thumbnail ||
-      !category ||
-      !instructions.length
+      !category
     ) {
       return res.status(400).json({
         success: false,
@@ -74,12 +69,12 @@ exports.createCourse = async (req, res) => {
         message: "Category Details Not Found",
       });
     }
-
     // Upload the thumbnail image to Cloudinary
     const thumbnailImage = await uploadImageToCloudinary(
       thumbnail,
       process.env.FOLDER_NAME
     );
+    console.log(thumbnailImage);
 
     // new course with the provided details
     const newCourse = await Course.create({
@@ -88,27 +83,33 @@ exports.createCourse = async (req, res) => {
       instructor: instructorDetails._id,
       whatYouWillLearn: whatYouWillLearn,
       price,
-      tag,
+      tag: tag,
       category: categoryDetails._id,
       thumbnail: thumbnailImage.secure_url,
       status: status,
-      instructions,
+      instructions: instructions,
     });
 
     // Add new course to the instructor's profile
     await User.findByIdAndUpdate(
-      instructorDetails._id,
       {
-        $push: { courses: newCourse._id },
+        _id: instructorDetails._id,
+      },
+      {
+        $push: {
+          courses: newCourse._id,
+        },
       },
       { new: true }
     );
 
     // Add the new course to the category
     await Category.findByIdAndUpdate(
-      category,
+      { _id: category },
       {
-        $push: { courses: newCourse._id },
+        $push: {
+          course: newCourse._id,
+        },
       },
       { new: true }
     );
@@ -234,10 +235,15 @@ exports.getCourseDetails = async (req, res) => {
     const courseDetails = await Course.findOne({ _id: courseId })
       .populate({
         path: "instructor",
-        populate: { path: "additionalDetails" },
+        model: "User",
+        populate: {
+          path: "additionalDetails",
+          model: "User",
+          options: { strictPopulate: false },
+        },
       })
       .populate("category")
-      .populate("ratingAndReviews")
+      //.populate("ratingAndReviews")
       .populate({
         path: "courseContent",
         populate: {
@@ -247,7 +253,7 @@ exports.getCourseDetails = async (req, res) => {
       })
       .exec();
 
-    //validation
+    // Validation
     if (!courseDetails) {
       return res.status(400).json({
         success: false,
@@ -280,7 +286,6 @@ exports.getCourseDetails = async (req, res) => {
     });
   }
 };
-
 // Get full details of a specific course including user's progress
 exports.getFullCourseDetails = async (req, res) => {
   try {
