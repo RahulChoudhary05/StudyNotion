@@ -1,32 +1,32 @@
 const SubSection = require("../models/SubSection");
 const Section = require("../models/Section");
-const {uploadImageToCloudinary} = require("../utils/imageUploader")
+const { uploadImageToCloudinary } = require("../utils/imageUploader");
 require("dotenv").config();
 
 //create subsection
 exports.createSubSection = async (req, res) => {
   try {
-    //fetch data from req body
+    // Fetch data from req body
     const { sectionId, title, timeDuration, description } = req.body;
 
-    //extract file/video
+    // Extract video file
     const video = req.files.videoFile;
 
-    //validation
-    if (!sectionId || !title || !timeDuration || !description) {
+    // Validation
+    if (!sectionId || !title || !timeDuration || !description || !video) {
       return res.status(400).json({
         success: false,
-        message: "All field's are required",
+        message: "All fields are required",
       });
     }
 
-    //upload video to cloudinary
+    // Upload video to Cloudinary
     const uploadDetails = await uploadImageToCloudinary(
       video,
       process.env.FOLDER_NAME
     );
 
-    //create a sub section
+    // Create a sub section
     const subSectionDetails = await SubSection.create({
       title: title,
       timeDuration: timeDuration,
@@ -34,9 +34,9 @@ exports.createSubSection = async (req, res) => {
       videoUrl: uploadDetails.secure_url,
     });
 
-    //update section with this subsection ObjectId
-    const updateSection = await Section.findByIdAndUpdate(
-      { _id: sectionId },
+    // Update the section with this sub section ObjectId
+    const updatedSection = await Section.findByIdAndUpdate(
+      sectionId,
       {
         $push: {
           subSection: subSectionDetails._id,
@@ -44,19 +44,18 @@ exports.createSubSection = async (req, res) => {
       },
       { new: true }
     ).populate("subSection");
-    //HW: log updated section here, after adding populate query
 
-    //return response
+    // Return response
     return res.status(200).json({
       success: true,
-      message: "SubSection created Successfully",
-      updateSection,
+      message: "SubSection created successfully",
+      updatedSection,
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "Unable to create subsections, please try again",
+      message: "Unable to create sub section, please try again",
       error: error.message,
     });
   }
@@ -135,12 +134,15 @@ exports.deleteSubSection = async (req, res) => {
   }
 };
 
-//verify signature of Razorpay and Server
-exports.verifySignature = async (req,res)=>{
-  //server secret
+// Verify signature of Razorpay and Server
+exports.verifySignature = async (req, res) => {
+  // Server secret
   const webhookSecret = "12345678";
-  
-  //Razorpay secret
+
+  // Razorpay signature
   const signature = req.header("x-razorpay-signature");
-  //match both secret
-}
+
+  // Match both secrets or implement the verification logic based on the signature
+
+  // Add verification logic here
+};

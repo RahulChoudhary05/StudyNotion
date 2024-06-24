@@ -1,14 +1,18 @@
 const cloudinary = require("cloudinary").v2;
 
 exports.uploadImageToCloudinary = async (file, folder, height, quality) => {
-  const option = {folder};
-  if(height){
-    option.height = height;
+  if (!file || !file.tempFilePath) {
+    throw new Error("File or tempFilePath is missing.");
   }
-  if(quality){
-    option.quality = quality;
-  }
-  option.resource_type = "auto";
 
-  return await cloudinary.uploader.upload(file.tempFilePath, option);
+  const options = { folder };
+  if (height) {
+    options.height = height;
+  }
+  if (quality) {
+    options.quality = quality;
+  }
+  options.resource_type = "auto";
+
+  return await cloudinary.uploader.upload(file.tempFilePath, options);
 };
