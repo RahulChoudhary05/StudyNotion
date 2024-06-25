@@ -1,11 +1,5 @@
-// utils/mailSender.js
-
 const nodemailer = require("nodemailer");
 require("dotenv").config();
-
-console.log("MAIL_HOST:", process.env.MAIL_HOST);
-console.log("MAIL_USER:", process.env.MAIL_USER);
-console.log("MAIL_PASS:", process.env.MAIL_PASS);
 
 const mailSender = async (email, title, body) => {
   try {

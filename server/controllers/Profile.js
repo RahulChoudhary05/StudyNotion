@@ -81,7 +81,7 @@ exports.updateProfile = async (req, res) => {
 //Explore -> how can we schedule this deletion operation
 exports.deleteAccount = async (req, res) => {
   try {
-    //get id(delete account id)
+    //get id(delete account)
     const id = req.user.id;
 
     //validation
