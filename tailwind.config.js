@@ -125,16 +125,9 @@ module.exports = {
       },
     },
     extend: {
-      colors: {
-        codeblock1: {
-          start: "#8a2be2",
-          middle: "#ffa500",
-          end: "#f8f8ff",
-        },
-      },
       maxWidth: {
         maxContent: "1260px",
-        maxContentTab: "650px",
+        maxContentTab: "650px"
       },
     },
   },

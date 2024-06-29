@@ -6,6 +6,7 @@ import CTAButton from "../components/core/HomePage/Button";
 import Banner from "../assets/Images/banner.mp4";
 import CodeBlocks from "../components/core/HomePage/CodeBlocks";
 import "../App.css";
+import Footer from "../components/common/Footer";
 
 function Home() {
   return (
@@ -82,7 +83,7 @@ function Home() {
               link: "/signup",
               active: false,
             }}
-            codeColor={<div className=""></div>}
+            codeColor={{ style: { text: "codeblock1"} }}
             codeblock={`<!DOCTYPE html>\n <html lang="en">\n<head>\n<title>Rahul Choudhary</title>\n</head>\n<body>\n<h1><a href="/">Hello</a></h1>\n<nav> <a href="/one">One</a> <a href="/two">Two</a> <a href="/three">Three</a>\n</nav>\n</body>`}
             backgroundGradient={"codeblock1 absolute"}
           />
@@ -111,13 +112,14 @@ function Home() {
               link: "/signup",
               active: false,
             }}
-            codeColor={"text-white"}
+            codeColor={{ style: { text: "codeblock1"} }}
             codeblock={`import React from "react";\n import CTAButton from "./Button";\nimport TypeAnimation from "react-type";\nimport { FaArrowRight } from "react-icons/fa";\n\nconst Home = () => {\nreturn (\n<div>Home</div>\n)\n}\nexport default Home;`}
             backgroundGradient={"codeblock2 absolute"}
           />
         </div>
 
       </div>
+      <Footer/>
     </div>
   );
 }
