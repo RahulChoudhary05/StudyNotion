@@ -1,4 +1,4 @@
-export const NavbarLinks = [
+export const NavBarLinks = [
   {
     title: "Home",
     path: "/",
