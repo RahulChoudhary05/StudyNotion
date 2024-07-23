@@ -11,20 +11,6 @@ import ProfileDropdown from "../core/Auth/ProfileDropdown"
 import { apiConnector } from "../../services/apiconnector"
 import { categories } from "../../services/apis"
 
-const subLinks = [
-  {
-    title:"Java | Data Structures",
-    link:"/catalog/javadatastructures",
-  },
-  {
-    title:"Full Stack Development",
-    link:"/catalog/fullstackdevelopment",
-  },
-  {
-    title:"Android App Development",
-    link:"/catalog/androidappdevelopment",
-  },
-]
 export const NavBar = () => {
   const { token } = useSelector((state) => state.auth)
   const { user } = useSelector((state) => state.profile)
@@ -32,23 +18,23 @@ export const NavBar = () => {
 
     const location = useLocation()
 
-    // const [subLinks, setSubLinks] = useState([])
+    const [subLinks, setSubLinks] = useState([])
     const [loading, setLoading] = useState(false)
 
-    // const fetchSubLinks = async () => {
-    //   setLoading(true)
-    //   try {
-    //     const res = await apiConnector("GET", categories.CATEGORIES_API)
-    //     console.log("Printing subLinks result:", res)
-    //     setSubLinks(res.data.data)
-    //   } catch (error) {
-    //     console.log("Could not fetch Categories.", error)
-    //   }
-    //   setLoading(false)
-    // }
-    // useEffect(() => {
-    //   fetchSubLinks();
-    // }, [])
+    const fetchSubLinks = async () => {
+      setLoading(true)
+      try {
+        const res = await apiConnector("GET", categories.CATEGORIES_API)
+        console.log("Printing subLinks result:", res)
+        setSubLinks(res.data.data)
+      } catch (error) {
+        console.log("Could not fetch Categories.", error)
+      }
+      setLoading(false)
+    }
+    useEffect(() => {
+      fetchSubLinks();
+    }, [])
 
     const matchRoute = (route) => {
         return matchPath({ path: route }, location.pathname)
