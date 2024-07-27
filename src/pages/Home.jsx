@@ -1,28 +1,31 @@
-import React from "react";
-import { CiLocationArrow1 } from "react-icons/ci";
-import { Link } from "react-router-dom";
-import HighlightText from "../components/core/HomePage/HighlightText";
-import CTAButton from "../components/core/HomePage/Button";
-import Banner from "../assets/Images/banner.mp4";
-import CodeBlocks from "../components/core/HomePage/CodeBlocks";
-import "../App.css";
-import Footer from "../components/common/Footer";
-import TimelineSection from "../components/core/HomePage/TimelineSection";
-import LearningLanguageSection from "../components/core/HomePage/LearningLanguageSection";
-import InstructorSection from "../components/core/HomePage/InstructorSection";
-import ExploreMore from "../components/core/HomePage/ExploreMore";
+// Icons Import
+import { FaArrowRight } from "react-icons/fa"
+import { Link } from "react-router-dom"
+
+// Image and Video Import
+import Banner from "../assets/Images/banner.mp4"
+// Component Imports
+import Footer from "../components/common/Footer"
+// import ReviewSlider from "../components/common/ReviewSlider"
+import CTAButton from "../components/core/HomePage/Button"
+import CodeBlocks from "../components/core/HomePage/CodeBlocks"
+import ExploreMore from "../components/core/HomePage/ExploreMore"
+import HighlightText from "../components/core/HomePage/HighlightText"
+import InstructorSection from "../components/core/HomePage/InstructorSection"
+import LearningLanguageSection from "../components/core/HomePage/LearningLanguageSection"
+import TimelineSection from "../components/core/HomePage/TimelineSection"
 
 function Home() {
   return (
     <div>
-      {/* section - 1 */}
+      {/* Section 1 */}
       <div className="relative mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 text-white">
         {/* Become a Instructor Button */}
         <Link to={"/signup"}>
           <div className="group mx-auto mt-16 w-fit rounded-full bg-richblack-800 p-1 font-bold text-richblack-200 drop-shadow-[0_1.5px_rgba(255,255,255,0.25)] transition-all duration-200 hover:scale-95 hover:drop-shadow-none">
             <div className="flex flex-row items-center gap-2 rounded-full px-10 py-[5px] transition-all duration-200 group-hover:bg-richblack-900">
               <p>Become an Instructor</p>
-              <CiLocationArrow1 />
+              <FaArrowRight />
             </div>
           </div>
         </Link>
@@ -30,7 +33,7 @@ function Home() {
         {/* Heading */}
         <div className="text-center text-4xl font-semibold">
           Empower Your Future with
-          <HighlightText text={"Coding Skill's"} />
+          <HighlightText text={"Coding Skills"} />
         </div>
 
         {/* Sub Heading */}
@@ -87,9 +90,9 @@ function Home() {
               link: "/signup",
               active: false,
             }}
-            codeColor={{ style: { text: "codeblock1"} }}
-            codeblock={`<!DOCTYPE html>\n <html lang="en">\n<head>\n<title>Rahul Choudhary</title>\n</head>\n<body>\n<h1><a href="/">Hello</a></h1>\n<nav> <a href="/one">One</a> <a href="/two">Two</a> <a href="/three">Three</a>\n</nav>\n</body>`}
-            backgroundGradient={"codeblock1 absolute"}
+            codeColor={"text-yellow-25"}
+            codeblock={`<!DOCTYPE html>\n <html lang="en">\n<head>\n<title>This is myPage</title>\n</head>\n<body>\n<h1><a href="/">Header</a></h1>\n<nav> <a href="/one">One</a> <a href="/two">Two</a> <a href="/three">Three</a>\n</nav>\n</body>`}
+            backgroundGradient={<div className="codeblock1 absolute"></div>}
           />
         </div>
 
@@ -116,15 +119,17 @@ function Home() {
               link: "/signup",
               active: false,
             }}
-            codeColor={{ style: { text: "codeblock1"} }}
+            codeColor={"text-white"}
             codeblock={`import React from "react";\n import CTAButton from "./Button";\nimport TypeAnimation from "react-type";\nimport { FaArrowRight } from "react-icons/fa";\n\nconst Home = () => {\nreturn (\n<div>Home</div>\n)\n}\nexport default Home;`}
-            backgroundGradient={"codeblock2 absolute"}
+            backgroundGradient={<div className="codeblock2 absolute"></div>}
           />
         </div>
 
-        <ExploreMore/>
+        {/* Explore Section */}
+        <ExploreMore />
       </div>
-      {/* section 2 */}
+
+      {/* Section 2 */}
       <div className="bg-pure-greys-5 text-richblack-700">
         <div className="homepage_bg h-[320px]">
           {/* Explore Full Catagory Section */}
@@ -134,7 +139,7 @@ function Home() {
               <CTAButton active={true} linkto={"/signup"}>
                 <div className="flex items-center gap-2">
                   Explore Full Catalog
-                  <CiLocationArrow1 />
+                  <FaArrowRight />
                 </div>
               </CTAButton>
               <CTAButton active={false} linkto={"/login"}>
@@ -164,27 +169,29 @@ function Home() {
           </div>
 
           {/* Timeline Section - Section 2 */}
-          <TimelineSection/>
+          <TimelineSection />
 
           {/* Learning Language Section - Section 3 */}
-          <LearningLanguageSection/>
+          <LearningLanguageSection />
         </div>
       </div>
 
       {/* Section 3 */}
       <div className="relative mx-auto my-20 flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 bg-richblack-900 text-white">
         {/* Become a instructor section */}
-        <InstructorSection/>
+        <InstructorSection />
 
         {/* Reviws from Other Learner */}
-        <h1 className="text-center text-4xl font-semibold mt-8">
+        {/* <h1 className="text-center text-4xl font-semibold mt-8">
           Reviews from other learners
         </h1>
+        <ReviewSlider /> */}
       </div>
 
-      <Footer/>
+      {/* Footer */}
+      <Footer />
     </div>
-  );
+  )
 }
 
-export default Home;
+export default Home
