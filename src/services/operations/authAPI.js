@@ -88,7 +88,6 @@ export function login(email, password, navigate) {
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
     try {
-      //backend login function call
       const response = await apiConnector("POST", LOGIN_API, {
         email,
         password,
@@ -135,9 +134,9 @@ export function logout(navigate) {
 
 export function getPasswordResetToken(email , setEmailSent) {
   return async(dispatch) => {
-    dispatch(setLoading(true));
+    dispatch(setLoading(true));// mark loding true, because form front-end to backend call make a time
     try{
-      const response = await apiConnector("POST", RESETPASSTOKEN_API, {email,})
+      const response = await apiConnector("POST", RESETPASSTOKEN_API, {email})
 
       console.log("RESET PASSWORD TOKEN RESPONSE....", response);
 
