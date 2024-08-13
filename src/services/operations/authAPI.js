@@ -72,7 +72,8 @@ export function signUp(
         throw new Error(response.data.message)
       }
       toast.success("Signup Successful")
-      navigate("/login")
+      // Automatically log in the user after successful signup
+      dispatch(login(email, password, navigate));
     } catch (error) {
       console.log("SIGNUP API ERROR............", error)
       toast.error(error.response?.data?.message || "Signup Failed");
