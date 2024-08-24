@@ -10,7 +10,7 @@ function UpdatePassword() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const location = useLocation()
-  const { loading } = useSelector((state) => state.auth)
+  const { loading } = useSelector((state) => state.auth) //find the loding value
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: "",
@@ -33,6 +33,8 @@ function UpdatePassword() {
     const token = location.pathname.split("/").at(-1)
     dispatch(resetPassword(password, confirmPassword, token, navigate))
   }
+  //location.pathname property to get the current URL
+  //at(-1) method to access the last segment of the array, which is likely the token needed for the password reset process.
 
   return (
     <div className="grid min-h-[calc(100vh-3.5rem)] place-items-center">
