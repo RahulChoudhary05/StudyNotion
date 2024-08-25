@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 
+import CountryCode from "../../data/countrycode.json"
 import { apiConnector } from "../../services/apiconnector"
 import { contactusEndpoint } from "../../services/apis"
-import CountryCode from "../../data/countrycode.json"
 
 const ContactUsForm = () => {
   const [loading, setLoading] = useState(false)
@@ -34,14 +34,14 @@ const ContactUsForm = () => {
   useEffect(() => {
     if (isSubmitSuccessful) {
       reset({
+        email: "",
         firstname: "",
         lastname: "",
-        email: "",
-        phoneNo: "",
         message: "",
+        phoneNo: "",
       })
     }
-  }, [reset, isSubmitSuccessful])//run the useeffect code
+  }, [reset, isSubmitSuccessful])
 
   return (
     <form
@@ -110,8 +110,8 @@ const ContactUsForm = () => {
           <div className="flex w-[81px] flex-col gap-2">
             <select
               type="text"
-              name="phonenumber"
-              id="phonenumber"
+              name="firstname"
+              id="firstname"
               placeholder="Enter first name"
               className="form-style"
               {...register("countrycode", { required: true })}
