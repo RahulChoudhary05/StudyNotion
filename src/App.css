@@ -8,7 +8,6 @@ body {
 }
 
 /* ===== Scrollbar CSS ===== */
-/* Firefox */
 * {
   scrollbar-width: auto;
   scrollbar-color: #afb2bf;
@@ -127,7 +126,6 @@ top: calc(50% - 257.05px/2 - 47.47px);
 }
 .homepage_bg {
   background: url("../src/assets/Images/bghome.svg");
-  /* background-size: contain; */
 }
 
 @keyframes spinner-bulqg1 {
