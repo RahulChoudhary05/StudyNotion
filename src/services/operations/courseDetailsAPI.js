@@ -130,25 +130,38 @@ export const editCourseDetails = async (data, token) => {
 
 // create a section
 export const createSection = async (data, token) => {
-  let result = null
-  const toastId = toast.loading("Loading...")
+  let result = null;
+  const toastId = toast.loading("Creating Course Section...");
+  
   try {
     const response = await apiConnector("POST", CREATE_SECTION_API, data, {
       Authorization: `Bearer ${token}`,
-    })
-    console.log("CREATE SECTION API RESPONSE............", response)
-    if (!response?.data?.success) {
-      throw new Error("Could Not Create Section")
+    });
+
+    if (!response.data.success) {
+      throw new Error(response.data.message || "Failed to create section");
     }
-    toast.success("Course Section Created")
-    result = response?.data?.updatedCourse
+
+    toast.success("Course Section Created Successfully");
+    result = response.data.updatedCourse;
   } catch (error) {
-    console.log("CREATE SECTION API ERROR............", error)
-    toast.error(error.message)
+    console.log("CREATE SECTION API ERROR:", error);
+    
+    if (error.response && error.response.data) {
+      toast.error(error.response.data.message || "Error creating section");
+    } else {
+      toast.error("An unexpected error occurred. Please try again later.");
+    }
+  } finally {
+    toast.dismiss(toastId);
   }
-  toast.dismiss(toastId)
-  return result
+  
+  return result;
 }
+
+// ... (other functions)
+
+
 
 // create a subsection
 export const createSubSection = async (data, token) => {

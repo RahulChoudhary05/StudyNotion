@@ -72,11 +72,9 @@ export function signUp(
         throw new Error(response.data.message)
       }
       toast.success("Signup Successful")
-      // Automatically log in the user after successful signup
-      dispatch(login(email, password, navigate));
+      navigate("/login")
     } catch (error) {
       console.log("SIGNUP API ERROR............", error)
-      toast.error(error.response?.data?.message || "Signup Failed");
       toast.error("Signup Failed")
       navigate("/signup")
     }
@@ -95,7 +93,7 @@ export function login(email, password, navigate) {
         password,
       })
 
-      // console.log("LOGIN API RESPONSE............", response)
+      console.log("LOGIN API RESPONSE............", response)
 
       if (!response.data.success) {
         throw new Error(response.data.message)
@@ -136,9 +134,9 @@ export function logout(navigate) {
 
 export function getPasswordResetToken(email , setEmailSent) {
   return async(dispatch) => {
-    dispatch(setLoading(true));// mark loding true, because form front-end to backend call make a time
+    dispatch(setLoading(true));
     try{
-      const response = await apiConnector("POST", RESETPASSTOKEN_API, {email})
+      const response = await apiConnector("POST", RESETPASSTOKEN_API, {email,})
 
       console.log("RESET PASSWORD TOKEN RESPONSE....", response);
 
