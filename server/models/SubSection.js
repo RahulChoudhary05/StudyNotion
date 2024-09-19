@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 
+// Define your schema
 const subSectionSchema = new mongoose.Schema({
   title: {
     type: String,
+    required: true,
   },
   timeDuration: {
     type: String,
@@ -15,4 +17,5 @@ const subSectionSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("SubSection", subSectionSchema);
+// Check if the model already exists before creating it
+module.exports = mongoose.models.SubSection || mongoose.model("SubSection", subSectionSchema);
