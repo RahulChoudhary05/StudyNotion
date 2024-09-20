@@ -1,4 +1,3 @@
-// Import required models
 const Course = require("../models/Course");
 const Category = require("../models/Category");
 const Section = require("../models/Section");
