@@ -78,7 +78,6 @@ exports.updateProfile = async (req, res) => {
 };
 
 //delete profile(deleteAccount)
-//Explore -> how can we schedule this deletion operation
 exports.deleteAccount = async (req, res) => {
   try {
     //get id(delete account)
@@ -171,7 +170,6 @@ exports.updateDisplayPicture = async (req, res) => {
     });
   }
 };
-
 
 exports.getEnrolledCourses = async (req, res) => {
   try {
