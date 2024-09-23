@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import Home from "./pages/Home";
@@ -22,6 +22,7 @@ import Cart from "./components/core/Dashboard/Cart";
 import { ACCOUNT_TYPE } from "./utils/constants";
 import MyCourses from "./components/core/Dashboard/MyCourses";
 import AddCourse from "./components/core/Dashboard/AddCourse";
+import EditCourse from "./components/core/Dashboard/EditCourse";
 
 function App() {
   const dispatch = useDispatch();
@@ -103,6 +104,7 @@ function App() {
               <>
               <Route path="dashboard/my-courses" element={<MyCourses/>} />
               <Route path="dashboard/add-course" element={<AddCourse />} />
+              <Route path="dashboard/edit-course/:courseId" element={<EditCourse />} />
               </>
             )
           }
