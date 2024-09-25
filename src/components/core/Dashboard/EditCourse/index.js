@@ -27,7 +27,6 @@ export default function EditCourse() {
         // Log detailed error information
         console.error("Error fetching course details:", error?.response?.data || error.message || error);
   
-        // Display a user-friendly message in the UI
         alert("There was an issue retrieving the course details. Please try again later.");
       } finally {
         setLoading(false);
