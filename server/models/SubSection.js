@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// Define your schema
 const subSectionSchema = new mongoose.Schema({
   title: {
     type: String,
