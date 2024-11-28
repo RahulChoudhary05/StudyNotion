@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { IoAddCircleOutline } from "react-icons/io5"
 import { MdNavigateNext } from "react-icons/md"
-import { useDispatch, useSelector } from "react-redux"
 
 import {
   createSection,
@@ -15,7 +14,6 @@ import {
   setStep,
 } from "../../../../../slices/courseSlice"
 import IconBtn from "../../../../common/IconBtn"
-import NestedView from "./NestedView"
 
 export default function CourseBuilderForm() {
   const {
