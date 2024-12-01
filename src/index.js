@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import reportWebVitals from "./reportWebVitals";
 import rootReducer from "./reducer";
 import { configureStore } from "@reduxjs/toolkit"
+import { Toaster } from "react-hot-toast";
 
 
 const store = configureStore({
