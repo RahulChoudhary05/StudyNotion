@@ -240,14 +240,6 @@ top: calc(50% - 257.05px/2 - 47.47px);
   @apply cursor-pointer rounded-md bg-yellow-50 px-[20px] py-[8px] font-semibold text-richblack-900;
 }
 
-/* Swiper CSS Starts */
-/* .swiper {
-  max-width: 1200px;
-  width: 91.66%;
-  height: 185px;
-  margin: 50px 0px;
-} */
-
 .swiper-slide {
   width: 100%;
   height: 100%;
