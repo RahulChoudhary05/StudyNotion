@@ -10,7 +10,6 @@ const ContactForm = () => {
       <p className="">
         Tell us more about yourself and what you&apos;re got in mind.
       </p>
-
       <div className="mt-7">
         <ContactUsForm />
       </div>
