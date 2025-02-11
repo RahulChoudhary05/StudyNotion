@@ -42,7 +42,6 @@ details > summary::-webkit-details-marker {
   display: none;
 }
 
-/* https://10015.io/tools/css-loader-generator */
 .spinner {
   width: 56px;
   height: 56px;
