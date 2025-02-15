@@ -19,4 +19,3 @@ const profileSlice = createSlice({
 });
 
 export const {setUser, setLoading} = profileSlice.actions;
-export default profileSlice.reducer;
