@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "http://localhost:4000/api/v2";
+const BASE_URL = "http://localhost:4000/api/v1";
 
 // Create an Axios instance with custom configuration
 export const axiosInstance = axios.create({
