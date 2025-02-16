@@ -68,7 +68,7 @@ function LoginForm() {
           className="w-full rounded-[0.5rem] bg-richblack-800 p-[12px] pr-12 text-richblack-5"
         />
         <span
-          onClick={() => setShowPassword((prev) => !prev)}
+          onClick={() => setShowPassword()}
           className="absolute right-3 top-[38px] z-[10] cursor-pointer"
         >
           {showPassword ? (
