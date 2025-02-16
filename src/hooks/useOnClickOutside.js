@@ -8,6 +8,8 @@ export default function useOnClickOutside(ref, handler) {
       if (!ref.current || ref.current.contains(event.target)) {
         return;
       }
+      // Otherwise, call the provided handler function
+      handler(event);
     };
 
     // Add event listeners for mousedown and touchstart events on the document
