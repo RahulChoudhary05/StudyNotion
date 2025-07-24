@@ -1,7 +1,7 @@
 import { toast } from "react-hot-toast"
 
-import { updateCompletedLectures } from "../../slices/viewCourseSlice";
-import { setLoading } from "../../slices/profileSlice";
+import { updateCompletedLectures } from "../../slices/viewCourseSlice"
+// import { setLoading } from "../../slices/profileSlice";
 import { apiConnector } from "../apiconnector"
 import { courseEndpoints } from "../apis"
 
@@ -130,38 +130,25 @@ export const editCourseDetails = async (data, token) => {
 
 // create a section
 export const createSection = async (data, token) => {
-  let result = null;
-  const toastId = toast.loading("Creating Course Section...");
-  
+  let result = null
+  const toastId = toast.loading("Loading...")
   try {
     const response = await apiConnector("POST", CREATE_SECTION_API, data, {
       Authorization: `Bearer ${token}`,
-    });
-
-    if (!response.data.success) {
-      throw new Error(response.data.message || "Failed to create section");
+    })
+    console.log("CREATE SECTION API RESPONSE............", response)
+    if (!response?.data?.success) {
+      throw new Error("Could Not Create Section")
     }
-
-    toast.success("Course Section Created Successfully");
-    result = response.data.updatedCourse;
+    toast.success("Course Section Created")
+    result = response?.data?.updatedCourse
   } catch (error) {
-    console.log("CREATE SECTION API ERROR:", error);
-    
-    if (error.response && error.response.data) {
-      toast.error(error.response.data.message || "Error creating section");
-    } else {
-      toast.error("An unexpected error occurred. Please try again later.");
-    }
-  } finally {
-    toast.dismiss(toastId);
+    console.log("CREATE SECTION API ERROR............", error)
+    toast.error(error.message)
   }
-  
-  return result;
+  toast.dismiss(toastId)
+  return result
 }
-
-// ... (other functions)
-
-
 
 // create a subsection
 export const createSubSection = async (data, token) => {
